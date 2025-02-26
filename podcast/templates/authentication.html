@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ auth_type }}</title>
+    <link
+        rel="stylesheet"
+        href="../static/css/main.css"
+    />
+    <link rel="icon" href="../static/logo.png">
+</head>
+<body>
+    <div id="body">
+        {%  include 'navbar.html' %}
+        <div id="content-2">
+            <header id="header">
+                <div class="copyright">&copy; hrol166 - kcam870 - kand684</div>
+                {{ auth_type }}
+            </header>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="form-field">
+                    {{ form.username.label(class="search-input") }} <br>
+                    {{ form.username(class="search-container") }} <br>
+                </div>
+
+                <div class="form-field">
+                    {{ form.password.label(class="search-input") }} <br>
+                    {{ form.password(class="search-container") }} <br>
+                </div>
+
+                {{ form.submit(class="search-button") }}
+            </form>
+
+            {% if auth_type == "Register" %}
+                <div>
+                    Already have an account? Login <a href="{{ url_for('authentication_bp.login') }}"> Here. </a>
+                </div>
+            {% endif %}
+            <div class="error-message">
+                {% if form.password.errors %}
+                {{ form.password.errors[0] }}
+                {% else %}
+                &nbsp;
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
