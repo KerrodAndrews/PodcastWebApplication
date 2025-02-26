@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Playlists</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div id="content-2">
+        <header id="header">
+            My Playlists
+            <div class="copyright">&copy; hrol166 - kcam870 - kand684 </div>
+        </header>
+
+        <div id="container">
+            <main id="main">
+                <form action="{{ url_for('playlists_bp.create_playlist') }}" method="POST">
+                    <label for="playlist_name">Create a New Playlist:</label>
+                    <input type="text" id="playlist_name" name="playlist_name" required>
+                    <button type="submit">Create</button>
+                </form>
+
+                <h2>Your Playlists:</h2>
+                {% for playlist in playlists %}
+                    <div class="playlist">
+                        <h3>{{ playlist._playlist_name }}</h3>
+                        <p>Owner: {{ playlist._user.username }}</p>
+                        <p>Podcasts in Playlist:</p>
+                        <ul>
+                            {% for pod in playlist.get_podcasts() %}
+                                <li>{{ pod.title }}
+                                    <form action="{{ url_for('playlists_bp.remove_podcast_from_playlist', playlist_id=playlist._playlist_id, podcast_title=pod) }}" method="POST" style="display:inline;">
+                                        <button type="submit">Remove</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <p>Episodes in Playlist:</p>
+                        <ul>
+                            {% for epi in playlist.get_episodes() %}
+                                <li>{{ epi.title }}
+                                    <form action="{{ url_for('playlists_bp.remove_episode_from_playlist', playlist_id=playlist._playlist_id, episode_title=epi.title) }}" method="POST" style="display:inline;">
+                                        <button type="submit">Remove</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>
