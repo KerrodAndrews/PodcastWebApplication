@@ -1,0 +1,28 @@
+<nav>
+    <img id="logo" src="../static/logo.png" />
+    <div class="heading">Overhear</div>
+    <div class="navbar">
+        {% if username %}
+            <h3 class="Welcome-paragraph" style="text-align: center;">
+                Welcome {{ username }}!
+            </h3>
+        {% endif %}
+        <ul>
+            <li><a href="{{ url_for('home_bp.home') }}"> <img src="../static/Icons/home.svg" id="home-icon"> Home</a></li>
+            <li><a href="{{ url_for('catalogue_bp.catalogue') }}"><img src="../static/Icons/headphones.svg" id="catalogue-icon"> Podcasts</a></li>
+            <li><a href="{{ url_for('playlists_bp.playlists') }}"> <img src="../static/Icons/book-open.svg" id="playlist-icon"> My Playlists</a></li>
+            <li><a href="#Account">
+                <img src="../static/Icons/user.svg" id="user-icon" alt="Account Icon"> My Account</a>
+            </li>
+            {% if not username %}
+            <li><a href="{{ url_for('authentication_bp.register') }}"> Register</a></li>
+            <li><a href="{{ url_for('authentication_bp.login') }}"> Login</a></li>
+            {% else %}
+            <li><a href="{{ url_for('authentication_bp.logout') }}"> Logout</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div id="nav-footer">
+        CS235 hrol166 - kcam870 - kand684
+    </div>
+</nav>
