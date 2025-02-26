@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Podcast Description</title>
+    <link
+        rel="stylesheet"
+        href="../static/css/main.css"
+    />
+    <link rel="icon" href="../static/logo.png">
+</head>
+<body>
+    {% include 'navbar.html'%}
+    <div id="content-2">
+            <header id="header">
+              {{podcast.title}}
+              <div class="copyright">&copy; hrol166 - kcam870 - kand684 </div>
+            </header>
+            <div id="container">
+              <main id="main">
+                <div id="description">
+                    <img src={{podcast.image}} alt="image">
+                    <p><i>Author:</i> {{podcast.author}} </p>
+                    <p><i>Language:</i> {{podcast.language}}</p>
+                    <p><i>About:</i> {{podcast.description}}</p>
+                    <p><i>Categories: </i> {{podcast.get_pleasant_categories()}} </p>
+                    <p><i>Website: </i> {{podcast.website}} </p>
+                    <p><i>iTunes ID: </i> {{podcast.itunes_id}} </p>
+                    <p><i>Episodes: </i>
+                        <ul>
+                <!-- Code to generate each episode in podcast -->
+                    {% for episode in items_on_page %}
+                        <li>{{ episode.title }}
+                            <form action="{{ url_for('playlists_bp.add_episode_to_playlist', episode_title=episode.title) }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="podcast_id" value="{{ podcast.id }}">
+                                <input type="hidden" name="episode_title" value="{{ episode.title }}">
+
+                                <select name="playlist_id" id="playlist_id">
+                                    {% for playlist in user_playlists %}
+                                        <option value="{{ playlist._playlist_id }}">{{ playlist._playlist_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit">Add Episode to Playlist</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+                    </p>
+                    {%  if page > 1 %}
+                    <a href="{{ url_for('podcast_description_bp.podcast_description', podcast_id=podcast.id, page=page-1) }}">Previous  </a>
+                {% endif %}
+                    <span> Page {{ page }} of {{ total_pages }}</span>
+                {% if page < total_pages %}
+                <a href="{{ url_for('podcast_description_bp.podcast_description', podcast_id=podcast.id, page=page+1) }}">  Next</a>
+                {% endif %}
+
+                    <p>Average Rating: {{ average_rating }}/10</p>
+                    <p>Reviews: </p>
+                    <ul>
+                        {% for review in reviews %}
+                            <li>{{ username }}: {{ review.content }} (Rating: {{ review.rating }}/10)</li>
+                        {% endfor %}
+                    </ul>
+
+                    <!-- Submit a review -->
+                {% if session['username'] %}
+                    <p>Leave a Review:</p>
+                    <form method="post">
+                        <label for="rating">Rating (0-10):</label>
+                        <input type="number" name="rating" min="0" max="10" required>
+                        <br>
+                        <label for="content">Review:</label>
+                        <textarea name="content" required></textarea>
+                        <br>
+                        <button type="submit">Submit Review</button>
+                    </form>
+                    <form action="{{ url_for('playlists_bp.add_podcast_to_playlist', podcast_id=podcast.id) }}" method="POST">
+                        <input type="hidden" name="podcast_id" value="{{ podcast.id }}">
+
+                        <select name="playlist_id" id="playlist_id">
+                            {% for playlist in user_playlists %}
+                                <option value="{{ playlist._playlist_id }}">{{ playlist._playlist_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Add Podcast to Playlist</button>
+                    </form>
+                {% else %}
+                    <p>Please <a href="{{ url_for('authentication_bp.login') }}">log in</a> or <a href="{{ url_for('authentication_bp.register') }}">Register</a> to leave a review.</p>
+                    <!-- redirect to login page or register page -->
+                {% endif %}
+
+                </div>
+              </main>
+            </div>
+  </div>
+</body>
+</html>
