@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Overhear</title>
+    <link
+      rel="stylesheet"
+      href="../static/css/main.css"
+    />
+    <link rel="icon" href="../static/logo.png">
+</head>
+
+<body>
+    <div id="body">
+        {% include 'navbar.html'%}
+        <div id="content-2">
+            <header id="header">
+              Overhear
+              <div class="copyright">&copy; hrol166 - kcam870 - kand684</div>
+            </header>
+                <div class="Welcome-paragraph">
+                    Welcome to Overhear, a catalogue of some of the finest podcasts available. Browse some randomly assembled podcasts below, or head over to 'Podcasts' to view our entire selection.
+                </div>
+            <div id="container">
+              <main id="main">
+                <form action="{{ url_for('search_query_bp.search') }}" method="GET" class="search-container">
+                    <input type="text" name="query" placeholder="Search Podcast..." class="search-input" required>
+                    <select name="parameter" id="search-parameter">
+                        <option value="Title">Title</option>
+                        <option value="Author">Author</option>
+                        <option value="Category">Category</option>
+                    </select>
+
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+              </main>
+            </div>
+            <div id="podcast-grid">
+              {% for podcast in podcasts %}
+                <div class="podcast-item">
+                  <a href="{{url_for('podcast_description_bp.podcast_description', podcast_id=podcast.id)}}">
+                    <img src="{{podcast.image}}" alt="{{podcast.title}}">
+                    <div class="podcast-info">
+                      <h3>{{podcast.title}}</h3>
+                      <p>{{podcast.get_pleasant_categories()}}</p>
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
